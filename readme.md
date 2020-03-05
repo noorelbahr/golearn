@@ -5,7 +5,7 @@ Go is an open source programming language that makes it easy to build simple, re
 It's easy to get started.
 
 ### Set Up GO Environment
-Install Go and set `GOPATH` variable with simply follow the instruction from the video [here](https://www.youtube.com/watch?v=5qI8z_lB5Lw){:target="_blank"}.
+Install Go and set `GOPATH` variable with simply follow the instruction from the video [here](https://www.youtube.com/watch?v=5qI8z_lB5Lw).
 
 ### Set Up Project
 
