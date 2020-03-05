@@ -98,6 +98,25 @@ func CreateUser(user User) (User, error) {
 	return user, nil
 }
 
+func UpdateUser(user User) (User, error) {
+	db := connect()
+	defer db.Close()
+
+	err := db.Model(&user).Updates(user).Error
+	if err != nil {
+		return User{}, err
+	}
+
+	return user, nil
+}
+
+func DeleteUser(user User) error {
+	db := connect()
+	defer db.Close()
+
+	return db.Delete(&user).Error
+}
+
 /**
  * Gorm Connect
  */

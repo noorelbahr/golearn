@@ -23,6 +23,8 @@ func handleRequests() {
 	router.Handle("/users", auth.IsAuthorized(controllers.AllUsers)).Methods("GET")
 	router.Handle("/users/{id}", auth.IsAuthorized(controllers.FindUser)).Methods("GET")
 	router.Handle("/users", auth.IsAuthorized(controllers.CreateUser)).Methods("POST")
+	router.Handle("/users/{id}", auth.IsAuthorized(controllers.UpdateUser)).Methods("PUT")
+	router.Handle("/users/{id}", auth.IsAuthorized(controllers.DeleteUser)).Methods("DELETE")
 	log.Fatal(http.ListenAndServe(":8082", router))
 }
 
