@@ -1,4 +1,4 @@
-# My First Go #
+# My First Go with JWT #
 Go is an open source programming language that makes it easy to build simple, reliable, and efficient software. More info: https://golang.org
 
 ## Getting Started
