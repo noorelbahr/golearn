@@ -1,15 +1,10 @@
 package models
 
 import (
-	"fmt"
-	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/noorelbahr/golearn/helpers"
+	"github.com/noorelbahr/golearn/database"
 	"time"
 )
-
-var db *gorm.DB
-var err error
 
 type User struct {
 	ID        	uint 		`gorm:"primary_key" json:"id"`
@@ -24,44 +19,18 @@ type User struct {
 
 type Users []User
 
-func InitialMigration() {
-	db := connect()
+func AllUsers() Users {
+	db := database.Connect()
 	defer db.Close()
 
-	// Migrate
-	err := db.AutoMigrate(&User{}).Error
-	if err == nil {
-		fmt.Println("User migration: OK")
-	}
-
-	// Create default user data
-	_, err = FindUserByUsername("johndoe")
-	if err != nil {
-		hash, _ := helpers.HashPassword("123123")
-
-		var user User
-		user.Username = "johndoe"
-		user.Password = hash
-		user.Fullname = "John Doe"
-		_, err = CreateUser(user)
-		if err == nil {
-			fmt.Println("User seeder: OK")
-		}
-	}
-}
-
-func AllUsers() []User {
-	db := connect()
-	defer db.Close()
-
-	var users []User
+	var users Users
 	db.Find(&users)
 
 	return users
 }
 
 func FindUser(id int) (User, error) {
-	db := connect()
+	db := database.Connect()
 	defer db.Close()
 
 	var user User
@@ -74,7 +43,7 @@ func FindUser(id int) (User, error) {
 }
 
 func FindUserByUsername(username string) (User, error) {
-	db := connect()
+	db := database.Connect()
 	defer db.Close()
 
 	var user User
@@ -87,7 +56,7 @@ func FindUserByUsername(username string) (User, error) {
 }
 
 func CreateUser(user User) (User, error) {
-	db := connect()
+	db := database.Connect()
 	defer db.Close()
 
 	err := db.Create(&user).Error
@@ -99,7 +68,7 @@ func CreateUser(user User) (User, error) {
 }
 
 func UpdateUser(user User) (User, error) {
-	db := connect()
+	db := database.Connect()
 	defer db.Close()
 
 	err := db.Model(&user).Updates(user).Error
@@ -111,20 +80,8 @@ func UpdateUser(user User) (User, error) {
 }
 
 func DeleteUser(user User) error {
-	db := connect()
+	db := database.Connect()
 	defer db.Close()
 
 	return db.Delete(&user).Error
-}
-
-/**
- * Gorm Connect
- */
-func connect() *gorm.DB {
-	db, err := gorm.Open("sqlite3", "golearn.db")
-	//db, err := gorm.Open("mysql", "root:@/golearn?charset=utf8&parseTime=True&loc=Local")
-	if err != nil {
-		panic(err.Error())
-	}
-	return db
 }

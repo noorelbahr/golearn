@@ -5,7 +5,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/noorelbahr/golearn/auth"
 	"github.com/noorelbahr/golearn/controllers"
-	"github.com/noorelbahr/golearn/models"
+	"github.com/noorelbahr/golearn/database/migrations"
 	"log"
 	"net/http"
 )
@@ -29,7 +29,7 @@ func handleRequests() {
 }
 
 func main()  {
-	models.InitialMigration()
+	migrations.InitialMigration()
 
 	handleRequests()
 }
