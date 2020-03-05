@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/jinzhu/gorm"
 	"github.com/noorelbahr/golearn/auth"
 	"github.com/noorelbahr/golearn/helpers"
 	"github.com/noorelbahr/golearn/models"
@@ -26,7 +25,11 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user := models.FindUserByUsername(loginRequest.Username)
+	user, err := models.FindUserByUsername(loginRequest.Username)
+	if err != nil {
+		helpers.JsonError(w, "Username is not registered.", 400)
+		return
+	}
 
 	isValid := helpers.CheckPasswordHash(loginRequest.Password, user.Password)
 	if !isValid {
@@ -44,15 +47,4 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	response.Token = token
 
 	helpers.JsonSuccess(w, response, 200)
-}
-
-/**
- * Gorm Connect
- */
-func connect() *gorm.DB {
-	db, err := gorm.Open("sqlite3", "golearn.db")
-	if err != nil {
-		panic(err.Error())
-	}
-	return db
 }

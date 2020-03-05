@@ -1,8 +1,10 @@
 package models
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/noorelbahr/golearn/helpers"
 	"time"
 )
 
@@ -26,7 +28,26 @@ func InitialMigration() {
 	db := connect()
 	defer db.Close()
 
-	db.AutoMigrate(&User{})
+	// Migrate
+	err := db.AutoMigrate(&User{}).Error
+	if err == nil {
+		fmt.Println("User migration: OK")
+	}
+
+	// Create default user data
+	_, err = FindUserByUsername("johndoe")
+	if err != nil {
+		hash, _ := helpers.HashPassword("123123")
+
+		var user User
+		user.Username = "johndoe"
+		user.Password = hash
+		user.Fullname = "John Doe"
+		_, err = CreateUser(user)
+		if err == nil {
+			fmt.Println("User seeder: OK")
+		}
+	}
 }
 
 func AllUsers() []User {
@@ -52,14 +73,17 @@ func FindUser(id int) (User, error) {
 	return user, nil
 }
 
-func FindUserByUsername(username string) User {
+func FindUserByUsername(username string) (User, error) {
 	db := connect()
 	defer db.Close()
 
 	var user User
-	db.Where("username = ?", username).First(&user)
+	err := db.Where("username = ?", username).First(&user).Error
+	if err != nil {
+		return User{}, err
+	}
 
-	return user
+	return user, nil
 }
 
 func CreateUser(user User) (User, error) {
@@ -78,8 +102,8 @@ func CreateUser(user User) (User, error) {
  * Gorm Connect
  */
 func connect() *gorm.DB {
-	//db, err := gorm.Open("sqlite3", "golearn.db")
-	db, err := gorm.Open("mysql", "root:@/golearn?charset=utf8&parseTime=True&loc=Local")
+	db, err := gorm.Open("sqlite3", "golearn.db")
+	//db, err := gorm.Open("mysql", "root:@/golearn?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		panic(err.Error())
 	}
