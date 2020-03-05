@@ -40,6 +40,8 @@ username: johndoe
 password: 123123
 ```
 
+We can check our `localhost` on port `8082` (http://localhost:8082)
+
 ## Testing Our API
 To test our API, click button bellow : 
 
