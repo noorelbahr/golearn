@@ -10,12 +10,16 @@ import (
 	"net/http"
 )
 
+/**
+ * Welcome page or Home Page
+ */
 func homePage(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode("This is my homepage")
 }
 
-
-
+/**
+ * Handle Requests or Routes
+ */
 func handleRequests() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/login", controllers.Login).Methods("POST")
@@ -28,6 +32,9 @@ func handleRequests() {
 	log.Fatal(http.ListenAndServe(":8082", router))
 }
 
+/**
+ * Main Function
+ */
 func main()  {
 	migrations.InitialMigration()
 
