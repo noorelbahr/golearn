@@ -16,8 +16,6 @@ Then open terminal and move to the project directory
 cd $GOPATH/github.com/{username}/golearn
 ```
 
-Here we assume that our `Apache` and `MySQL` server are running.
-
 ---
 ### Run Our Project
 Simply run :
