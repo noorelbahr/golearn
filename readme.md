@@ -9,9 +9,6 @@ Install Go and set `GOPATH` variable with simply follow the instruction from the
 
 ### Set Up Project
 
-Make sure we have a database named `golearn`
-
-
 Move the project to your workspace (i.e. `golang/github.com/noorelbahr`).
 
 Then open terminal and move to the project directory
