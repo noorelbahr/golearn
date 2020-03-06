@@ -6,6 +6,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/noorelbahr/golearn/helpers"
 	"github.com/noorelbahr/golearn/models"
+	"io/ioutil"
 	"net/http"
 	"strconv"
 )
@@ -44,21 +45,52 @@ func FindUser(w http.ResponseWriter, r *http.Request) {
 func CreateUser(w http.ResponseWriter, r *http.Request) {
 	var user models.User
 
-	// Get request body
-	err := json.NewDecoder(r.Body).Decode(&user)
+	// Get request body -> multipart/form-data
+	err := r.ParseMultipartForm(2 << 20)
 	if err != nil {
-		helpers.JsonError(w, err.Error(), 400)
+		helpers.JsonError(w, "Err: " + err.Error(), 400)
 		return
 	}
 
 	// Hash user password
 	hash, _ := helpers.HashPassword(user.Password)
+
+	// Set user data
+	user.Username = r.PostForm.Get("username")
+	user.Fullname = r.PostForm.Get("fullname")
 	user.Password = hash
+
+	// Check user file
+	file, handler, err := r.FormFile("picture")
+	if err == nil {
+		defer file.Close()
+
+		// Make temp file
+		tempFile, err := ioutil.TempFile("assets", "*-" + handler.Filename)
+		if err != nil {
+			helpers.JsonError(w, "Err3: " + err.Error(), 400)
+			return
+		}
+		defer tempFile.Close()
+
+		// Read the file
+		fileBytes, err := ioutil.ReadAll(file)
+		if err != nil {
+			helpers.JsonError(w, "Err4: " + err.Error(), 400)
+			return
+		}
+
+		// Save file
+		_, err = tempFile.Write(fileBytes)
+		if err == nil {
+			user.Picture = tempFile.Name()
+		}
+	}
 
 	// Create user data
 	user, err = models.CreateUser(user)
 	if err != nil {
-		helpers.JsonError(w, err.Error(), 400)
+		helpers.JsonError(w, "Err5: " + err.Error(), 400)
 		return
 	}
 
