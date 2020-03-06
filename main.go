@@ -21,6 +21,7 @@ func homePage(w http.ResponseWriter, r *http.Request) {
  * Handle Requests or Routes
  */
 func handleRequests() {
+	// Register routes
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/login", controllers.Login).Methods("POST")
 	router.Handle("/", auth.IsAuthorized(homePage)).Methods("GET")
@@ -29,6 +30,12 @@ func handleRequests() {
 	router.Handle("/users", auth.IsAuthorized(controllers.CreateUser)).Methods("POST")
 	router.Handle("/users/{id}", auth.IsAuthorized(controllers.UpdateUser)).Methods("PUT")
 	router.Handle("/users/{id}", auth.IsAuthorized(controllers.DeleteUser)).Methods("DELETE")
+
+	// Handle static file
+	fs := http.FileServer(http.Dir("./assets/"))
+	router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", fs))
+
+	// Lesten and serve on 8082
 	log.Fatal(http.ListenAndServe(":8082", router))
 }
 
