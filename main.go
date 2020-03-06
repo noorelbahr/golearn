@@ -33,7 +33,7 @@ func handleRequests() {
 
 	// Handle static file
 	fs := http.FileServer(http.Dir("./assets/"))
-	router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", fs))
+	router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", fs)).Methods("GET")
 
 	// Lesten and serve on 8082
 	log.Fatal(http.ListenAndServe(":8082", router))
