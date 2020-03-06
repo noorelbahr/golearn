@@ -42,3 +42,9 @@ To test our API, click button bellow :
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/4ff03dae8d6678c1a248)
 
+### Important!!
+The Postman Collection will be `updated periodically` depends on any changes made to the project.
+
+If you want to get a latest collection, just click on the `Run` button above and import it as a copy to your Postman App.
+
+You always can do it whenever you want to check for a latest collection. ;)
