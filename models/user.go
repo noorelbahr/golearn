@@ -1,6 +1,7 @@
 package models
 
 import (
+	"encoding/json"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/noorelbahr/golearn/database"
 	"time"
@@ -18,6 +19,24 @@ type User struct {
 }
 
 type Users []User
+
+func (u *User) MarshalJSON() ([]byte, error) {
+	type Alias User
+
+	// Set user picture url
+	pictureUrl := u.Picture
+	if u.Picture != "" {
+		pictureUrl = "http://localhost:8082/" + u.Picture
+	}
+
+	return json.Marshal(&struct {
+		*Alias
+		Picture string `json:"picture"`
+	}{
+		Alias: (*Alias)(u),
+		Picture: pictureUrl,
+	})
+}
 
 func AllUsers() Users {
 	db := database.Connect()
