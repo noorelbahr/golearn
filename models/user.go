@@ -15,34 +15,32 @@ type User struct {
 	Picture 	string 		`gorm:"column:picture" json:"picture"`
 	CreatedAt 	time.Time	`json:"created_at"`
 	UpdatedAt 	time.Time	`json:"updated_at"`
-	DeletedAt 	*time.Time 	`sql:"index" json:"deleted_at"`
+	DeletedAt 	*time.Time 	`sql:"index" json:"-"`
 }
 
-type Users []User
-
-func (u *User) MarshalJSON() ([]byte, error) {
+func (u User) MarshalJSON() ([]byte, error) {
 	type Alias User
 
 	// Set user picture url
 	pictureUrl := u.Picture
-	if u.Picture != "" {
-		pictureUrl = "http://localhost:8082/" + u.Picture
+	if pictureUrl != "" {
+		pictureUrl = "http://localhost:8082/" + pictureUrl
 	}
 
 	return json.Marshal(&struct {
-		*Alias
+		Alias
 		Picture string `json:"picture"`
 	}{
-		Alias: (*Alias)(u),
+		Alias: (Alias)(u),
 		Picture: pictureUrl,
 	})
 }
 
-func AllUsers() Users {
+func AllUsers() []User {
 	db := database.Connect()
 	defer db.Close()
 
-	var users Users
+	var users []User
 	db.Find(&users)
 
 	return users
