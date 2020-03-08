@@ -4,18 +4,14 @@ import (
 	"encoding/json"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/noorelbahr/golearn/database"
-	"time"
 )
 
 type User struct {
-	ID        	uint 		`gorm:"primary_key" json:"id"`
-	Username 	string 		`gorm:"column:username;unique_index" json:"username"`
-	Password 	string 		`gorm:"column:password;size:255" json:"password"`
-	Fullname 	string 		`gorm:"column:fullname" json:"fullname"`
-	Picture 	string 		`gorm:"column:picture" json:"picture"`
-	CreatedAt 	time.Time	`json:"created_at"`
-	UpdatedAt 	time.Time	`json:"updated_at"`
-	DeletedAt 	*time.Time 	`sql:"index" json:"-"`
+	BaseModel
+	Username 	string 	`gorm:"column:username;unique_index" json:"username"`
+	Password 	string 	`gorm:"column:password;size:255" json:"password"`
+	Fullname 	string 	`gorm:"column:fullname" json:"fullname"`
+	Picture 	string 	`gorm:"column:picture" json:"picture"`
 }
 
 /**
@@ -49,12 +45,12 @@ func AllUsers() []User {
 	return users
 }
 
-func FindUser(id int) (User, error) {
+func FindUser(id string) (User, error) {
 	db := database.Connect()
 	defer db.Close()
 
 	var user User
-	err := db.First(&user, id).Error
+	err := db.Where("id = ?", id).First(&user).Error
 	if err != nil {
 		return User{}, err
 	}

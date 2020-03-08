@@ -6,7 +6,6 @@ import (
 	"github.com/noorelbahr/golearn/helpers"
 	"github.com/noorelbahr/golearn/models"
 	"net/http"
-	"strconv"
 )
 
 /**
@@ -25,7 +24,7 @@ func AllUsers(w http.ResponseWriter, r *http.Request) {
 func FindUser(w http.ResponseWriter, r *http.Request) {
 	// Get param id
 	vars := mux.Vars(r)
-	id, _ := strconv.Atoi(vars["id"])
+	id, _ := vars["id"]
 
 	// Get user data
 	user, err := models.FindUser(id)
@@ -89,7 +88,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 func UpdateUser(w http.ResponseWriter, r *http.Request)  {
 	// Get param id
 	vars := mux.Vars(r)
-	id, _ := strconv.Atoi(vars["id"])
+	id, _ := vars["id"]
 
 	// Get user data
 	user, err := models.FindUser(id)
@@ -146,7 +145,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request)  {
 func DeleteUser(w http.ResponseWriter, r *http.Request)  {
 	// Get param id
 	vars := mux.Vars(r)
-	id, _ := strconv.Atoi(vars["id"])
+	id, _ := vars["id"]
 
 	// Get user data
 	user, err := models.FindUser(id)

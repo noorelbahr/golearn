@@ -22,6 +22,7 @@ Open the project with your code editor and don't forget to download all dependen
 ```shell script
 go get -u github.com/gorilla/mux
 go get -u github.com/jinzhu/gorm
+go get -u github.com/satori/go.uuid
 go get -u github.com/dgrijalva/jwt-go
 go get -u golang.org/x/crypto/bcrypt
 ```
