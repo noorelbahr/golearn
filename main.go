@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 	"github.com/noorelbahr/golearn/auth"
 	"github.com/noorelbahr/golearn/controllers"
 	"github.com/noorelbahr/golearn/database/migrations"
@@ -35,8 +36,16 @@ func handleRequests() {
 /**
  * Main Function
  */
-func main()  {
+func main() {
+	// Load .env file
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
+	// Run migration
 	migrations.InitialMigration()
 
+	// Handle requests
 	handleRequests()
 }

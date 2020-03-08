@@ -12,30 +12,31 @@ Install Go and set `GOPATH` variable with simply follow the instruction from the
 Move the project to your workspace (i.e. `golang/github.com/noorelbahr`).
 
 Then open terminal and move to the project directory
-```shell script
+```shell
 cd $GOPATH/github.com/{username}/golearn
 ```
 
 #### Open The Project
 Open the project with your code editor and don't forget to download all dependencies :
 
-```shell script
-go get -u github.com/gorilla/mux
-go get -u github.com/jinzhu/gorm
-go get -u github.com/satori/go.uuid
-go get -u github.com/dgrijalva/jwt-go
-go get -u golang.org/x/crypto/bcrypt
+```shell
+go get github.com/gorilla/mux
+go get github.com/jinzhu/gorm
+go get github.com/satori/go.uuid
+go get github.com/dgrijalva/jwt-go
+go get github.com/joho/godotenv
+go get golang.org/x/crypto/bcrypt
 ```
 
 ---
 ### Run Our Project
 Simply run :
-```shell script
+```shell
 make dev
 ```
 
 Or
-```shell script
+```shell
 go run main.go
 ```
 

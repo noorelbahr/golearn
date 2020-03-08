@@ -5,10 +5,11 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/noorelbahr/golearn/helpers"
 	"net/http"
+	"os"
 	"time"
 )
 
-var signingKey = []byte("MyJWTSecretKey")
+var signingKey = []byte(os.Getenv("JWT_SECRET"))
 
 func GenerateJWT() (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
