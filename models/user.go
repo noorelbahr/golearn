@@ -18,6 +18,9 @@ type User struct {
 	DeletedAt 	*time.Time 	`sql:"index" json:"-"`
 }
 
+/**
+ * Custom User's MarshalJSON function
+ */
 func (u User) MarshalJSON() ([]byte, error) {
 	type Alias User
 

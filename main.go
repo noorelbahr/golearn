@@ -1,21 +1,14 @@
 package main
 
 import (
-	"encoding/json"
 	"github.com/gorilla/mux"
 	"github.com/noorelbahr/golearn/auth"
 	"github.com/noorelbahr/golearn/controllers"
 	"github.com/noorelbahr/golearn/database/migrations"
+	"github.com/noorelbahr/golearn/helpers"
 	"log"
 	"net/http"
 )
-
-/**
- * Welcome page or Home Page
- */
-func homePage(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode("This is my homepage")
-}
 
 /**
  * Handle Requests or Routes
@@ -24,7 +17,7 @@ func handleRequests() {
 	// Register routes
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/login", controllers.Login).Methods("POST")
-	router.Handle("/", auth.IsAuthorized(homePage)).Methods("GET")
+	router.Handle("/", auth.IsAuthorized(controllers.HomePage)).Methods("GET")
 	router.Handle("/users", auth.IsAuthorized(controllers.AllUsers)).Methods("GET")
 	router.Handle("/users/{id}", auth.IsAuthorized(controllers.FindUser)).Methods("GET")
 	router.Handle("/users", auth.IsAuthorized(controllers.CreateUser)).Methods("POST")
@@ -32,7 +25,7 @@ func handleRequests() {
 	router.Handle("/users/{id}", auth.IsAuthorized(controllers.DeleteUser)).Methods("DELETE")
 
 	// Handle static file
-	fs := http.FileServer(http.Dir("./assets/"))
+	fs := http.FileServer(helpers.MyFS{Dir: http.Dir("./assets/")})
 	router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", fs)).Methods("GET")
 
 	// Lesten and serve on 8082
